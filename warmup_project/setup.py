@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'robot_teleop = example_pkg.robot_teleop:main',
+            'teleop = warmup_project.teleop:main',
+            'viz_marker = warmup_project.viz_marker:main',
         ],
     },
 )

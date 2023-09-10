@@ -5,10 +5,11 @@ import termios
 
 import rclpy
 from rclpy.node import Node
+from geometry_msgs.msg import Twist
 
-class RobotTeleop(Node):
+class Teleop(Node):
     def __init__(self):
-        super().__init__('robot_teleop')
+        super().__init__('teleop')
     
     def getKey():
         tty.setraw(sys.stdin.fileno())
@@ -19,7 +20,7 @@ class RobotTeleop(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = RobotTeleop()
+    node = Teleop()
     rclpy.spin(node)
 
     settings = termios.tcgetattr(sys.stdin)
