@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'teleop = warmup_project.teleop:main',
             'viz_marker = warmup_project.viz_marker:main',
+            'drive_square = warmup_project.drive_square:main',
         ],
     },
 )

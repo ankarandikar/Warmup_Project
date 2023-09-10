@@ -20,7 +20,7 @@ class VizMarker(Node):
         marker.action = Marker.ADD
         marker.pose.position.x = 1.0
         marker.pose.position.y = 2.0
-        marker.pose.position.z = 1.0
+        marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
         marker.pose.orientation.z = 0.0
