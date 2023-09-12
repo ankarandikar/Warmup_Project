@@ -11,14 +11,14 @@ class VizMarker(Node):
     
     def publish_marker (self):
         marker = Marker()
-        marker.header.frame_id = "odom"
+        marker.header.frame_id = "base_link"
         marker.header.stamp = self.get_clock().now().to_msg()
         marker.ns = "my_namespace"
         marker.id = 0
 
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
-        marker.pose.position.x = 1.0
+        marker.pose.position.x = 1.0    # x is forward, y is right
         marker.pose.position.y = 2.0
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0

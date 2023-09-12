@@ -35,7 +35,7 @@ class Teleop(Node):
         elif key == 'a':
             self.vel.angular.z = 1.0
             self.vel_publisher.publish(self.vel)
-            time.sleep(1.7)
+            time.sleep(1.5708)
             self.vel.angular.z = 0.0
             self.vel.linear.x = 1.0
             self.vel_publisher.publish(self.vel)
@@ -45,7 +45,7 @@ class Teleop(Node):
         elif key == 'd':
             self.vel.angular.z = -1.0
             self.vel_publisher.publish(self.vel)
-            time.sleep(1.7)
+            time.sleep(1.5708)
             self.vel.angular.z = 0.0
             self.vel.linear.x = 1.0
             self.vel_publisher.publish(self.vel)
