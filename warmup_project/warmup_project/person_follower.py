@@ -39,7 +39,7 @@ class PersonFollower(Node):
         if not self.scan:
             return
         for i,n in enumerate(scan.ranges):  # filter relevant values
-            if (n > 0 and n < 1) and (i < 90 or i > 270):
+            if (n > 0 and n < 1):# and (i < 120 or i > 240):
                 angles.append(i)
                 distances.append(n)
         if len(angles) < 5:
@@ -49,15 +49,16 @@ class PersonFollower(Node):
             y_values.append(distances[i]*math.sin(math.radians(n)))
         x_COM = sum(x_values)/len(x_values)
         y_COM = sum(y_values)/len(y_values)
-        # if x_COM > :
-        #     vel.angular.z = 2*y_COM
-        #     vel.linear.x = 0.5*x_COM
-        #     self.vel_publisher.publish(vel)
-        # else:
-        #     vel.linear.x = 0.0
-        #     vel.linear.y = 0.0
-        #     vel.angular.z = 0.0
-        #     self.vel_publisher.publish(vel)
+        #if x_COM > 0.2:
+        if not self.bumper_active:
+            vel.angular.z = 2*y_COM
+            vel.linear.x = 0.2*x_COM
+            self.vel_publisher.publish(vel)
+        else:
+            vel.linear.x = 0.0
+            vel.linear.y = 0.0
+            vel.angular.z = 0.0
+            self.vel_publisher.publish(vel)
 
 def main(args=None):
     rclpy.init(args=args)
