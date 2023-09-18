@@ -34,6 +34,7 @@ class PersonFollower(Node):
                               vel.left_side == 1 or \
                               vel.right_front ==1 or \
                               vel.right_side == 1)
+
     def run_loop(self):
         vel = Twist()
         scan : LaserScan = self.scan

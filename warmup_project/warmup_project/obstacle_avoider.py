@@ -15,6 +15,8 @@ class ObstacleAvoider(Node):
         self.subscriber = self.create_subscription(LaserScan, "scan", self.process_scan, 10)
         self.bump_subscriber = self.create_subscription(Bump, "bump", self.detect_bump, 10)
         self.bumper_active = False
+        self.scan : LaserScan = []
+        self.obstacle_angle = []
 
     def process_scan(self,message):
         self.scan = message
@@ -24,32 +26,37 @@ class ObstacleAvoider(Node):
                               vel.left_side == 1 or \
                               vel.right_front ==1 or \
                               vel.right_side == 1)
-        
-    def run_loop(self):
-        vel = Twist()
-        scan : LaserScan = self.scan
+    
+    def process_angles(self):
         angles = []
         distances = []
         x_values = []
         y_values = []
         if not self.scan:
             return
-        for i,n in enumerate(scan.ranges):  # filter relevant values
-            if (n > 0 and n < 1):# and (i < 120 or i > 240):
+        for i,n in enumerate(self.scan.ranges):
+            if (n > 5) and (i < 120 or i > 240):
                 angles.append(i)
-                distances.append(n)
-        if len(angles) < 5:
+                distances.append(i)
+        if len(self.angles) < 5:
             return
-        for i,n in enumerate(angles):  # convert to cartesian
+        for i,n in enumerate(angles):
             x_values.append(distances[i]*math.cos(math.radians(n)))
             y_values.append(distances[i]*math.sin(math.radians(n)))
         x_COM = sum(x_values)/len(x_values)
         y_COM = sum(y_values)/len(y_values)
-        #if x_COM > 0.2:
+        self.obstacle_angle = math.degrees(math.atan(y_COM/x_COM))
+
+        
+    def run_loop(self):
+        vel = Twist()
+        if not self.scan:
+            return
         if not self.bumper_active:
-            vel.angular.z = 2*y_COM
-            vel.linear.x = 0.2*x_COM
-            self.vel_publisher.publish(vel)
+            if self.obstacle_angle:
+                vel.angular.z = 2*y_COM
+                vel.linear.x = 0.2*x_COM
+                self.vel_publisher.publish(vel)
         else:
             vel.linear.x = 0.0
             vel.linear.y = 0.0
