@@ -44,11 +44,11 @@ class WallFollower(Node):
             self.vel_publisher.publish(vel)
             if dist_90 == 0.0:
                 dist_90 = 3.0
-            if dist_45 > dist_135: #turn right (towards wall)
+            if dist_45 > dist_135: #turn left (towards wall)
                 vel.angular.z = 0.1*dist_90
                 vel.linear.x = 0.1
                 self.vel_publisher.publish(vel)
-            elif dist_45 < dist_135: #turn left (away from wall)
+            elif dist_45 < dist_135: #turn right (away from wall)
                 vel.angular.z = -0.8/dist_90
                 vel.linear.x = 0.1
                 self.vel_publisher.publish(vel)

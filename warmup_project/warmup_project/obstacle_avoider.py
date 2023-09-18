@@ -10,13 +10,13 @@ class ObstacleAvoider(Node):
         super().__init__('obstacle_avoider')
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.run_loop)
+        #self.timer2 = self.create_timer(timer_period, self.process_angles)
         self.vel_publisher = self.create_publisher(Twist, "cmd_vel", 10)
         self.scan = None
         self.subscriber = self.create_subscription(LaserScan, "scan", self.process_scan, 10)
         self.bump_subscriber = self.create_subscription(Bump, "bump", self.detect_bump, 10)
         self.bumper_active = False
-        self.scan : LaserScan = []
-        self.obstacle_angle = []
+        self.obstacle_angle = 0
 
     def process_scan(self,message):
         self.scan = message
@@ -27,36 +27,67 @@ class ObstacleAvoider(Node):
                               vel.right_front ==1 or \
                               vel.right_side == 1)
     
-    def process_angles(self):
-        angles = []
-        distances = []
-        x_values = []
-        y_values = []
-        if not self.scan:
-            return
-        for i,n in enumerate(self.scan.ranges):
-            if (n > 5) and (i < 120 or i > 240):
-                angles.append(i)
-                distances.append(i)
-        if len(self.angles) < 5:
-            return
-        for i,n in enumerate(angles):
-            x_values.append(distances[i]*math.cos(math.radians(n)))
-            y_values.append(distances[i]*math.sin(math.radians(n)))
-        x_COM = sum(x_values)/len(x_values)
-        y_COM = sum(y_values)/len(y_values)
-        self.obstacle_angle = math.degrees(math.atan(y_COM/x_COM))
+    # def process_angles(self):
+    #     angles = []
+    #     distances = []
+    #     x_values = []
+    #     y_values = []
+    #     scan : LaserScan = self.scan
+    #     if not scan:
+    #         return
+    #     for i,n in enumerate(scan.ranges):
+    #         if (n < 5) and (i < 90 or i > 270):
+    #             angles.append(i)
+    #             distances.append(i)
+    #     if len(angles) < 5:
+    #         return
+    #     for i,n in enumerate(angles):
+    #         x_values.append(distances[i]*math.sin(math.radians(n)))
+    #         y_values.append(distances[i]*math.cos(math.radians(n)))
+    #     self.x_COM = sum(x_values)/len(x_values)
+    #     y_COM = sum(y_values)/len(y_values)
+    #     if self.x_COM == 0:
+    #         return
+    #     self.obstacle_angle = math.degrees(math.atan(y_COM/self.x_COM))
+    #     print(self.obstacle_angle)
 
         
     def run_loop(self):
         vel = Twist()
-        if not self.scan:
+        angles = []
+        distances = []
+        x_values = []
+        y_values = []
+        scan : LaserScan = self.scan
+        if not scan:
             return
+        for i,n in enumerate(scan.ranges):
+            if (n < 5) and (i < 90 or i > 270):
+                angles.append(i)
+                distances.append(i)
+        if len(angles) < 5:
+            return
+        for i,n in enumerate(angles):
+            x_values.append(distances[i]*math.sin(math.radians(n)))
+            y_values.append(distances[i]*math.cos(math.radians(n)))
+        self.x_COM = sum(x_values)/len(x_values)
+        y_COM = sum(y_values)/len(y_values)
+        if self.x_COM == 0:
+            return
+        self.obstacle_angle = math.degrees(math.atan(y_COM/self.x_COM))
+        print(self.obstacle_angle)
+        # if not self.scan:
+        #     return
         if not self.bumper_active:
-            if self.obstacle_angle:
-                vel.angular.z = 2*y_COM
-                vel.linear.x = 0.2*x_COM
-                self.vel_publisher.publish(vel)
+            None
+            #vel.linear.x = 0.4
+            #vel.angular.z = 15/self.obstacle_angle
+            #self.vel_publisher.publish(vel)
+            # if self.obstacle_angle < 0:
+            #     vel.angular.z = -15/self.obstacle_angle
+            #     self.vel_publisher.publish(vel)
+            # else:
+            #     vel.angular.z = 15/self.obstacle_angle
         else:
             vel.linear.x = 0.0
             vel.linear.y = 0.0

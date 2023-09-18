@@ -51,8 +51,8 @@ class PersonFollower(Node):
         if len(angles) < 5:
             return
         for i,n in enumerate(angles):  # convert to cartesian
-            x_values.append(distances[i]*math.cos(math.radians(n)))
-            y_values.append(distances[i]*math.sin(math.radians(n)))
+            x_values.append(distances[i]*math.sin(math.radians(n)))
+            y_values.append(distances[i]*math.cos(math.radians(n)))
         self.x_COM = sum(x_values)/len(x_values)
         self.y_COM = sum(y_values)/len(y_values)
         #if x_COM > 0.2:
