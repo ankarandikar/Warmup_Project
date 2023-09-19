@@ -12,7 +12,7 @@ class DriveSquare(Node):
         self.vel_publisher = self.create_publisher(Twist, "cmd_vel", 10)
         #self.elapsed_time = time.time()-self.start_time
         self.linear_vel = 0.2
-        self.angular_vel = 0.2
+        self.angular_vel = 0.3
     
     def vel_zero(self):
         vel = Twist()
@@ -35,10 +35,10 @@ class DriveSquare(Node):
         self.vel_publisher.publish(vel)
     
     def run_loop(self):
-        #pause = time.sleep(2.0)
+        #self.pause = time.sleep(30.0)
         elapsed_time = float(time.time()-self.start_time)
         drive_time = 1.0/self.linear_vel
-        turn_time =  1.75/self.angular_vel  # overcorrect for 1.5708 rad (90 deg) turn
+        turn_time =  1.67/self.angular_vel  # overcorrect for 1.5708 rad (90 deg) turn
         if elapsed_time < drive_time:
             self.drive_straight()
         elif elapsed_time < drive_time + turn_time:

@@ -38,7 +38,7 @@ class WallFollower(Node):
             return
         dist_45 = self.scan.ranges[45]
         dist_135 = self.scan.ranges[135]
-        dist_90 = self.scan.ranges[90]
+        dist_90 = (self.scan.ranges[85]+self.scan.ranges[95])/2
         if not self.bumper_active:
             vel.linear.x = 0.1
             self.vel_publisher.publish(vel)
@@ -49,15 +49,15 @@ class WallFollower(Node):
                 vel.linear.x = 0.1
                 self.vel_publisher.publish(vel)
             elif dist_45 < dist_135: #turn right (away from wall)
-                vel.angular.z = -0.8/dist_90
+                vel.angular.z = -0.1/dist_90
                 vel.linear.x = 0.1
                 self.vel_publisher.publish(vel)
             else: #dist_45 == dist_135 (parallel to wall)
-                if dist_90 > 0.5:
+                if dist_90 > 0.3:
                     vel.angular.z = 0.05
                     vel.linear.x = 0.1
                     self.vel_publisher.publish(vel)
-                elif dist_90 < 0.5:
+                elif dist_90 < 0.3:
                     vel.angular.z = -0.05
                     vel.linear.x = 0.1
                     self.vel_publisher.publish(vel)
@@ -77,12 +77,12 @@ class WallFollower(Node):
         marker = Marker()
         marker.header.frame_id = "base_link"
         marker.header.stamp = self.get_clock().now().to_msg()
-        marker.ns = "namespace_45"
+        marker.ns = "namespace_135"
         marker.id = 0
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
-        marker.pose.position.x = self.scan.ranges[45]*math.sin(math.radians(45))
-        marker.pose.position.y = self.scan.ranges[45]*math.cos(math.radians(45))
+        marker.pose.position.x = self.scan.ranges[45]*math.cos(math.radians(45))
+        marker.pose.position.y = self.scan.ranges[45]*math.sin(math.radians(45))
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
@@ -95,8 +95,8 @@ class WallFollower(Node):
         marker.color.r = 1.0
         marker.color.g = 0.4
         marker.color.b = 0.7
-        
-        self.marker45_pub.publish(marker)
+
+        self.marker135_pub.publish(marker)
 
     def publish_marker90(self):
         if not self.scan:
@@ -110,7 +110,7 @@ class WallFollower(Node):
         marker.action = Marker.ADD
         marker.pose.position.x = 0.0
         # For some reason the distance at 90 always returns 0
-        marker.pose.position.y = self.scan.ranges[91]
+        marker.pose.position.y = (self.scan.ranges[85]+self.scan.ranges[95])/2
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
