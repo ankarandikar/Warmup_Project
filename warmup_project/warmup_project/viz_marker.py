@@ -5,12 +5,13 @@ from visualization_msgs.msg import Marker
 class VizMarker(Node):
     def __init__(self):
         super().__init__('viz_marker')
+        # Publish marker every 0.1 seconds
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.publish_marker)
         self.marker_pub = self.create_publisher(Marker, 'viz_marker', 10)
     
     def publish_marker (self):
-        marker = Marker()
+        marker = Marker()   # Create instance of Marker
         marker.header.frame_id = "base_link"
         marker.header.stamp = self.get_clock().now().to_msg()
         marker.ns = "my_namespace"
@@ -18,8 +19,8 @@ class VizMarker(Node):
 
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
-        marker.pose.position.x = 1.0    # x is forward, y is right
-        marker.pose.position.y = 2.0
+        marker.pose.position.x = 1.0    # positive x is forward
+        marker.pose.position.y = 2.0    # positive y is left
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
@@ -28,7 +29,7 @@ class VizMarker(Node):
         marker.scale.x = 0.5
         marker.scale.y = 0.5
         marker.scale.z = 0.5
-        marker.color.a = 1.0; # Don't forget to set the alpha!
+        marker.color.a = 1.0;   # Setting the alpha
         marker.color.r = 1.0
         marker.color.g = 0.4
         marker.color.b = 0.7

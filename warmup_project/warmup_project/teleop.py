@@ -1,3 +1,9 @@
+"""
+Robot teleoperator:
+Use w, a, x, d keys to move forward, left, back, and right
+Use s key to stop
+"""
+
 import tty
 import select
 import sys
@@ -11,12 +17,14 @@ import time
 class Teleop(Node):
     def __init__(self):
         super().__init__('teleop')
+        # Call run_loop every 0.1 seconds
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.run_loop)
-        self.vel = Twist()
-        self.vel_publisher = self.create_publisher(Twist, "cmd_vel", 10)
+        self.vel = Twist()  # Create instance of Twist
+        self.vel_publisher = self.create_publisher(Twist, "cmd_vel", 10)    # Publish to cmd_vel topic
     
     def getKey(self):
+        # Get keyboard inputs
         settings = termios.tcgetattr(sys.stdin)
         key = None
         tty.setraw(sys.stdin.fileno())
@@ -26,37 +34,40 @@ class Teleop(Node):
         return key
 
     def run_loop(self):
-        key = None
         key = self.getKey()
-        print(key)
-        if key == 'w':
+        print(key)  # Print keyboard input
+        if key == 'w':  # Move forward
             self.vel.linear.x = 1.0
             self.vel_publisher.publish(self.vel)
-        elif key == 'a':
+        elif key == 'a':    # Turn left
+            # Turn for set amount of time
             self.vel.angular.z = 1.0
             self.vel_publisher.publish(self.vel)
-            time.sleep(1.5708)
+            time.sleep(1.5708)  # Enough time for 90 degree turn
+            # Go straight after turning
             self.vel.angular.z = 0.0
             self.vel.linear.x = 1.0
             self.vel_publisher.publish(self.vel)
-        elif key == 's':
+        elif key == 's':    # Stop
             self.vel.linear.x = 0.0
             self.vel_publisher.publish(self.vel)
-        elif key == 'd':
+        elif key == 'd':    # Turn right
+            # Turn for set amount of time
             self.vel.angular.z = -1.0
             self.vel_publisher.publish(self.vel)
-            time.sleep(1.5708)
+            time.sleep(1.5708)  # Enough time for 90 degree turn
+            # Go straight after turning
             self.vel.angular.z = 0.0
             self.vel.linear.x = 1.0
             self.vel_publisher.publish(self.vel)
-        elif key == 'x':
+        elif key == 'x':    # Move back
             self.vel.linear.x = -1.0
             self.vel_publisher.publish(self.vel)
-        elif key == '\x03':
+        elif key == '\x03':     # Exit script
             self.vel.linear.x = 0.0
             self.vel.angular.z = 0.0
             raise KeyboardInterrupt
-        else:
+        else:   # If any keys without a set output are pressed
             print("Invalid input")
 
 def main(args=None):

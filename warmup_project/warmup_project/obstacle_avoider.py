@@ -5,6 +5,7 @@ from geometry_msgs.msg import Twist
 from neato2_interfaces.msg import Bump
 from visualization_msgs.msg import Marker
 import math
+import time
 
 class ObstacleAvoider(Node):
     def __init__(self):
@@ -67,28 +68,37 @@ class ObstacleAvoider(Node):
         if not scan:
             return
         for i,n in enumerate(scan.ranges):
-            if (n < 1) and (i < 30 or i > 330):
+            if (n < 1.5) and (i < 60 or i > 300):
                 angles.append(i)
                 distances.append(n)
         if len(angles) < 5:
             return
         for i,n in enumerate(angles):
-            if i < 90:
-                x_values.append(distances[i]*math.sin(math.radians(n)))
-                y_values.append(distances[i]*math.cos(math.radians(n)))
-            else:
-                x_values.append(distances[i]*math.sin(math.radians(n-180)))
-                y_values.append(-distances[i]*math.cos(math.radians(n)))
+            x_values.append(distances[i]*math.cos(math.radians(n)))
+            y_values.append(distances[i]*math.sin(math.radians(n)))
+            # if i < 90:
+            #     x_values.append(distances[i]*math.sin(math.radians(n)))
+            #     y_values.append(distances[i]*math.cos(math.radians(n)))
+            # else:
+            #     x_values.append(distances[i]*math.sin(math.radians(n-180)))
+            #     y_values.append(-distances[i]*math.cos(math.radians(n)))
         self.x_COM = sum(x_values)/len(x_values)
         self.y_COM = sum(y_values)/len(y_values)
-        print(self.x_COM)
-        print(self.y_COM)
+        #print(self.x_COM)
+        #print(self.y_COM)
         if self.y_COM == 0:
             return
         obstacle_angle = math.degrees(math.atan(self.x_COM/self.y_COM))
         if not self.bumper_active:
-            vel.linear.x = 0.2
-            vel.angular.z = -0.1*obstacle_angle
+            vel.linear.x = 0.1
+            self.vel_publisher.publish(vel)
+            vel.angular.z = -0.01*obstacle_angle
+            self.vel_publisher.publish(vel)
+            print(vel.linear.x)
+            print(vel.angular.z)
+            time.sleep(0.2)
+            vel.linear.x = 0.1
+            vel.angular.z = 0.0
             self.vel_publisher.publish(vel)
         else:
             vel.linear.x = 0.0
@@ -106,8 +116,8 @@ class ObstacleAvoider(Node):
         marker.id = 0
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
-        marker.pose.position.x = 10.0*self.x_COM
-        marker.pose.position.y = 10.0*self.y_COM
+        marker.pose.position.x = 5.0*self.x_COM
+        marker.pose.position.y = 5.0*self.y_COM
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0

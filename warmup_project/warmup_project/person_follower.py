@@ -1,3 +1,12 @@
+"""
+Person follower:
+This script converts polar laser scan readings from the robot (within a set range of angles) into cartesian coordinates
+and finds the center of mass of the readings. The x-coordinate of the center of mass determines the linear speed of the
+Neato (it moves faster if the center of mass is closer, and vice versa), and the y-coordinate determined the angular speed
+with the goal of getting the Neato angularly aligned with the center of mass. The goal is for the Neato to follow a person
+(represented by their center of mass) and stop once it reaches them (through triggering of the bump sensor).
+"""
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
@@ -52,12 +61,8 @@ class PersonFollower(Node):
         if len(angles) < 5:
             return
         for i,n in enumerate(angles):
-            if i < 90:
-                x_values.append(distances[i]*math.cos(math.radians(n)))
-                y_values.append(distances[i]*math.sin(math.radians(n)))
-            else:
-                x_values.append(distances[i]*math.cos(math.radians(n)))
-                y_values.append(distances[i]*math.sin(math.radians(n)))
+            x_values.append(distances[i]*math.cos(math.radians(n)))
+            y_values.append(distances[i]*math.sin(math.radians(n)))
         self.x_COM = sum(x_values)/len(x_values)
         self.y_COM = sum(y_values)/len(y_values)
         if not self.bumper_active:
