@@ -20,6 +20,7 @@ class FiniteStateController(Node):
         self.x_COM = 0
         self.y_COM = 0
         self.angles = []
+        self.person_angles = []
     
     def process_scan(self,message):
         self.scan = message
@@ -34,10 +35,11 @@ class FiniteStateController(Node):
         distances = []
         x_values = []
         y_values = []
+        self.angles = []
         if not self.scan:
             return
         for i,n in enumerate(self.scan.ranges):  # filter relevant values
-            if (n < 1.5):
+            if (n < 1):
                 self.angles.append(i)
                 distances.append(n)
         if len(self.angles) < 5:
@@ -53,6 +55,7 @@ class FiniteStateController(Node):
             self.obstacle_angle = math.degrees(math.atan(self.y_COM/self.x_COM))
         else:
             self.obstacle_angle = 180+math.degrees(math.atan(self.y_COM/self.x_COM))
+        self.person_angles = self.scan.ranges[0:30]+self.scan.ranges[330:360]
 
     def wall_follower(self):
         vel = Twist()   # Create instance of Twist
@@ -126,7 +129,7 @@ class FiniteStateController(Node):
         self.process_angles()
         print(len(self.angles))
         if not self.bumper_active:
-            if self.obstacle_angle < 30 and self.obstacle_angle > 330:
+            if sum(self.person_angles) != 0:
                 self.person_following()
                 print("Person following")
             else:
