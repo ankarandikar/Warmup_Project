@@ -4,7 +4,7 @@
 
 Over the course of this project, I implemented the following six behaviors on a Neato robot:
 
-* [Introduction](#introduction)
+* [Introduction]
 * [Behaviors](#behaviors)
     * [Robot Teleop](#teleop)
     * [Driving in a Square](#square)
