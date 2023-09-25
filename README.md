@@ -9,14 +9,14 @@
 * [Obstacle Avoidance] (#obstacle)
 * [Finite State Controller] (#controller)
 
-## Robot Teleop
+## <a id="teleop"></a> Robot Teleop
 
-## <a name="square" /> Driving in a Square
+## <a id="square"></a> Driving in a Square
 
-## <a name="wall" /> Wall Following
+## <a id="wall"></a> Wall Following
 
-## <a name="person" /> Person Following
+## <a id="person"></a> Person Following
 
-## <a name="obstacle" /> Obstacle Avoidance
+## <a id="obstacle"></a> Obstacle Avoidance
 
-## <a name="controller" /> Finite State Controller
+## <a id="controller"></a>  Finite State Controller
