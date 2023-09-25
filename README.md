@@ -8,7 +8,7 @@
 * [Obstacle Avoidance](#obstacle)
 * [Finite State Controller](#controller)
 
-## [Teleoperation](/warmup_project/teleop.py)
+## [Teleoperation](/warmup_project/warmup_project/teleop.py)
 
 ## Driving a Square
 
