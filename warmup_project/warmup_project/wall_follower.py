@@ -53,6 +53,9 @@ class WallFollower(Node):
         dist_135 = self.scan.ranges[135]
         # Sometimes the Neatos return 0.0 at degrees near 90, so I took the averages of the distances at 85 and 95 degrees
         dist_90 = (self.scan.ranges[85]+self.scan.ranges[95])/2
+        print("45",dist_45)
+        print("90",dist_90)
+        print("135",dist_135)
 
         # Wrap velocity commands in if statement so that Neato stops when bumpers are active
         if not self.bumper_active:  # If bumpers are not active
@@ -86,7 +89,7 @@ class WallFollower(Node):
             vel.angular.z = 0.0
             self.vel_publisher.publish(vel)
 
-    def publish_marker45(self,dist_45):
+    def publish_marker45(self):
         # Create marker at 45 degree reading
         if not self.scan:
             return
@@ -98,8 +101,8 @@ class WallFollower(Node):
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
         # Convert reading from 45 degrees to cartesian coordinates to plot in base_link frame
-        marker.pose.position.x = dist_45*math.cos(math.radians(45))
-        marker.pose.position.y = dist_45*math.sin(math.radians(45))
+        marker.pose.position.x = self.scan.ranges[45]*math.cos(math.radians(45))
+        marker.pose.position.y = self.scan.ranges[45]*math.sin(math.radians(45))
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
@@ -115,7 +118,7 @@ class WallFollower(Node):
 
         self.marker135_pub.publish(marker)
 
-    def publish_marker90(self,dist_90):
+    def publish_marker90(self):
         # Create marker at 90 degree reading
         if not self.scan:
             return
@@ -128,7 +131,7 @@ class WallFollower(Node):
         marker.action = Marker.ADD
         # Cartesian conversion is just x = 0 and y = value from 90 degree reading
         marker.pose.position.x = 0.0
-        marker.pose.position.y = dist_90
+        marker.pose.position.y = (self.scan.ranges[85]+self.scan.ranges[95])/2
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
@@ -144,7 +147,7 @@ class WallFollower(Node):
         
         self.marker90_pub.publish(marker)
     
-    def publish_marker135(self,dist_135):
+    def publish_marker135(self):
         # Create marker at 135 degree reading
         if not self.scan:
             return
@@ -156,8 +159,8 @@ class WallFollower(Node):
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
         # Convert reading from 135 degrees to cartesian coordinates to plot in base_link frame
-        marker.pose.position.x = dist_135*math.cos(math.radians(135))
-        marker.pose.position.y = dist_135*math.sin(math.radians(135))
+        marker.pose.position.x = self.scan.ranges[135]*math.cos(math.radians(135))
+        marker.pose.position.y = self.scan.ranges[135]*math.sin(math.radians(135))
         marker.pose.position.z = 0.0
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0

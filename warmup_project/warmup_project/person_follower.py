@@ -52,7 +52,7 @@ class PersonFollower(Node):
         distances = []
         x_values = []
         y_values = []
-        if not self.scan:
+        if not scan:
             return
         for i,n in enumerate(scan.ranges):  # filter relevant values
             if (n < 1.5) and (i < 90 or i > 270):
