@@ -32,41 +32,23 @@ class FiniteStateController(Node):
                               vel.right_side == 1)
 
     def process_angles(self):
-        distances = []
-        x_values = []
-        y_values = []
         self.angles = []
         if not self.scan:
             return
-        for i,n in enumerate(self.scan.ranges):  # filter relevant values
-            if (n < 1):
-                self.angles.append(i)
-                distances.append(n)
-        if len(self.angles) < 5:
-            return
-        for i,n in enumerate(self.angles):
-            x_values.append(1)#distances[i]*math.cos(math.radians(n)))
-            y_values.append(1)#distances[i]*math.sin(math.radians(n)))
-        self.x_COM = sum(x_values)/len(x_values)
-        self.y_COM = sum(y_values)/len(y_values)
-        if self.y_COM == 0:
-            return
-        if self.x_COM > 0:
-            self.obstacle_angle = math.degrees(math.atan(self.y_COM/self.x_COM))
-        else:
-            self.obstacle_angle = 180+math.degrees(math.atan(self.y_COM/self.x_COM))
-        self.person_angles = self.scan.ranges[0:30]+self.scan.ranges[330:360]
+        self.person_range = self.scan.ranges[0:20]+self.scan.ranges[340:360]
 
     def wall_follower(self):
         vel = Twist()   # Create instance of Twist
         if not self.scan:   # Wait to run code until scan has been received
             return
         # Index distances at 45, 90, and 135 degrees
-        dist_45 = self.scan.ranges[55]
+        dist_45 = self.scan.ranges[45]
         dist_135 = self.scan.ranges[135]
         # Sometimes the Neatos return 0.0 at degrees near 90, so I took the averages of the distances at 85 and 95 degrees
         dist_90 = (self.scan.ranges[85]+self.scan.ranges[95])/2
-
+        if dist_90 == 0:
+            return
+        
         # Wrap velocity commands in if statement so that Neato stops when bumpers are active
         if not self.bumper_active:  # If bumpers are not active
             vel.linear.x = 0.1
@@ -108,7 +90,7 @@ class FiniteStateController(Node):
         if not self.scan:
             return
         for i,n in enumerate(self.scan.ranges):  # filter relevant values
-            if (n < 1.5) and (i < 30 or i > 330):
+            if (n < 1.5) and (i < 40 or i > 320):
                 angles.append(i)
                 distances.append(n)
         if len(angles) < 5:
@@ -127,9 +109,8 @@ class FiniteStateController(Node):
         if not self.scan:
             return
         self.process_angles()
-        print(len(self.angles))
         if not self.bumper_active:
-            if sum(self.person_angles) != 0:
+            if max(self.person_range) != 0 and max(self.person_range) < 0.75:
                 self.person_following()
                 print("Person following")
             else:
