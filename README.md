@@ -1,13 +1,21 @@
-# Warmup_Project
+# Warmup Project
 *Anusha Karandikar*
 
 * [Teleoperation](#teleoperation)
-* [Driving a Square](#square-driver)
-* [Wall Follower](#wall-follower)
-* [Obstacle Avoidance](#obstacle-avoidance)
-* [Person Follower](#person-follower)
-* [Finite-State Controler](#finite-state-controller)
+* [Driving in a Square](#square)
+* [Wall Follower](#wall)
+* [Person Follower](#person)
+* [Obstacle Avoidance](#obstacle)
+* [Finite State Controller](#controller)
 
-## Teleoperation
+## [Teleoperation](/warmup_project/teleop.py)
 
 ## Driving a Square
+
+## Wall Follower
+
+## Person Follower
+
+## Obstacle Avoidance
+
+## Finite State Controller
