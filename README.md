@@ -1,14 +1,24 @@
 # Warmup Project
 *Anusha Karandikar*
+*Introduction to Computational Robotics, Fall 2023*
 
-* [Teleoperation](#teleoperation)
-* [Driving in a Square](#square)
-* [Wall Follower](#wall)
-* [Person Follower](#person)
-* [Obstacle Avoider](#obstacle)
-* [Finite State Controller](#controller)
+Over the course of this project, I implemented the following six behaviors on a Neato robot:
 
-## [Teleoperation](/warmup_project/warmup_project/teleop.py)
+* [Introduction](#introduction)
+* [Behaviors](#behaviors)
+    * [Robot Teleop](#teleop)
+    * [Driving in a Square](#square)
+    * [Wall Follower](#wall)
+    * [Person Follower](#person)
+    * [Obstacle Avoider](#obstacle)
+    * [Finite State Controller](#controller)
+* [Conclusion](#conclusion)
+
+# Introduction
+
+# Behaviors
+
+## [Robot Teleop](/warmup_project/warmup_project/teleop.py)
 
 ## [Driving a Square](/warmup_project/warmup_project/drive_square.py)
 
@@ -19,3 +29,5 @@
 ## [Obstacle Avoider](/warmup_project/warmup_project/obstacle_avoider.py)
 
 ## [Finite State Controller](/warmup_project/warmup_project/finite_state_controller.py)
+
+# Conclusion
