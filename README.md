@@ -2,9 +2,7 @@
 *Anusha Karandikar*
 *Introduction to Computational Robotics, Fall 2023*
 
-Over the course of this project, I implemented the following six behaviors on a Neato robot:
-
-* [Introduction]
+* [Introduction](#introduction)
 * [Behaviors](#behaviors)
     * [Robot Teleop](#teleop)
     * [Driving in a Square](#square)
@@ -15,8 +13,11 @@ Over the course of this project, I implemented the following six behaviors on a 
 * [Conclusion](#conclusion)
 
 # Introduction
+Over the course
 
 # Behaviors
+
+over the course
 
 ## [Robot Teleop](/warmup_project/warmup_project/teleop.py)
 
