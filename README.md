@@ -49,9 +49,11 @@ Similarly, if the distance reading from 45 degrees is *less* than the reading fr
 
 If the distance readings from 45 and 135 degrees are *equal* (middle diagram in Figure 1), the robot tries to get parallel to the wall at a distance of 0.3 meters. If the distance reading at 90 degrees is above 0.3 meters, the angular velocity is set to a positive value to turn the Neato counterclockwise and get closer to the wall. If the distance reading at 90 degrees is less than 0.3 meters, the angular velocity is set to a negative value to turn the Neato clockwise and get further away from the wall.
 
-For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, and 135 degrees. To do so, I converted the readings into cartesian coordinates using the following equations so that I could plot them in the Neato’s base_link coordinate frame:
+For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, and 135 degrees. To do so, I converted the readings into cartesian coordinates using the following equations (with angle $A$) so that I could plot them in the Neato’s base_link coordinate frame:
 
-$x = (\text{distance reading at } 45&deg;) \times \cos(45&deg;)$
+<p align="center">
+    $x = (\text{distance reading at } A&deg;) \times \cos(A&deg;)$
+</p>
 
 The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions.
 
