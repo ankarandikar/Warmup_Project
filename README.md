@@ -108,7 +108,7 @@ $y = \text{distance} \times \sin(\text{angle})$
 Once again, I used the cartesian coordinates to get the x- and y-coordinates of the center of mass of the scan readings, which represents the main obstacle in the Neato’s path. I added another variable, obstacle_angle, to keep track of the angle of the center of mass within the Neato’s base_link coordinate frame. To calculate this angle, I converted the center of mass back to polar coordinates:
 
 <p align="center">
-$obstacle_angle = \tan^{-1}(\div{\text{y\_COM}}{\text{x\_COM}})$
+$obstacle_angle = \tan^{-1}(\frac{\text{y\_COM}}{\text{x\_COM}})$
 </p>
 
 Due to the nature of inverse tan, this equation returns the angle within the range -45 to 45 degrees.
