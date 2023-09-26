@@ -55,7 +55,7 @@ If the distance readings from 45 and 135 degrees are *equal* (middle diagram in 
 For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, and 135 degrees. To do so, I converted the readings into cartesian coordinates using the following equations (with angle $A$) so that I could plot them in the Neato’s base_link coordinate frame:
 
 <p align="center">
-    $x = (\text{distance reading at } A&deg;) \times \cos(A&deg;)$
+    $x = (\text{distance reading at } A&deg;) \times \cos(A&deg;)$ <br>
     $y = (\text{distance reading at } A&deg;) \times \sin(A&deg;)$
 </p>
 
