@@ -31,7 +31,10 @@ The robot teleoperator controls the Neato’s movement depending on the user’s
 ## [Driving in a Square](/warmup_project/warmup_project/drive_square.py)
 
 ## [Wall Follower](/warmup_project/warmup_project/wall_follower.py)
-![](images/wall_follower.png)
+<p align="center">
+    <img src="images/wall_follower.png">
+    Figure 1: Wall follower conditions
+</p>
 
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
 
