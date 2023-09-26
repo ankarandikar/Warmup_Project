@@ -60,7 +60,7 @@ The code in this script is primarily structured in a series of nested if loops. 
 
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
 <p align="center">
-    <img src="images/person_follower.png">\
+    <img src="images/person_follower.png"> <br>
     Figure 2: Person follower
 </p>
 
