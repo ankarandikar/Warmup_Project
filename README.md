@@ -59,9 +59,8 @@ For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, a
 The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions.
 
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
-
 <p align="center">
-    <img src="images/person_follower.png">
+    <img src="images/wall_follower.png">
     Figure 2: Person follower
 </p>
 
