@@ -121,6 +121,15 @@ For this script, I separated the scan processing and velocity commands into sepa
 
 <a id="finite_state_controller"></a>
 ## [Finite State Controller](/warmup_project/warmup_project/finite_state_controller.py)
+<p align="center">
+    <img src="images/finite_state_diagram.png"> <br>
+    Figure 4: Finite-state diagram
+</p>
+
+<p align="center">
+    <img src="images/finite_state_controller.png"> <br>
+    Figure 5: Person following state
+</p>
 
 # Reflection
 I chose to work alone so that I could work on every aspect of this project and build an intuition for robot programming. While I do think I gained what I wanted from the experience, completing the entire project by myself - especially with a lack of experience - took much longer than the project was supposed to.
