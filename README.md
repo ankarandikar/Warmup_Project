@@ -2,21 +2,22 @@
 *Anusha Karandikar*
 *Introduction to Computational Robotics, Fall 2023*
 
-* [Introduction](#introduction)
-* [Behaviors](#behaviors)
-    + [Robot Teleop](#teleop)
-    + [Driving in a Square](#square)
-    + [Wall Follower](#wall)
-    + [Person Follower](#person)
-    + [Obstacle Avoider](#obstacle)
-    + [Finite State Controller](#controller)
-* [Reflection](#reflection)
+- [Introduction](#introduction)
+- [Behaviors](#behaviors)
+    * [Robot Teleop](#robot_teleop)
+    * [Driving in a Square](#drive_square)
+    * [Wall Follower](#wall_follower)
+    * [Person Follower](#person_follower)
+    * [Obstacle Avoider](#obstacle_avoider)
+    * [Finite State Controller](#finite_state_controller)
+- [Reflection](#reflection)
 
 # Introduction
 Over the course of this project, I implemented five primary behaviors on a Neato robot platform: teleoperation, driving in a square, wall following, person following, and obstacle avoidance. The final behavior was a finite state controller to switch between two behaviors (wall following and person following).
 
 # Behaviors
 
+<a id="robot_teleop"></a>
 ## [Robot Teleop](/warmup_project/warmup_project/teleop.py)
 The robot teleoperator controls the Neato’s movement depending on the user’s keyboard input. The W and X keys command the robot to drive forwards and backwards, respectively, at 1 meter per second. The S key brings it to a stop. I decided to have the A and D keys make the robot turn counterclockwise and clockwise, respectively, and then continue driving forward. For these turning commands, the robot turns at 1 radian per second for enough time to make a 90 degree turn, then drives straight per a linear velocity command. Once a key is pressed, the behavior continues until another key is pressed.
 
@@ -30,11 +31,13 @@ The code consists of one main if statement that checks for the keyboard input. I
 | D | Turn clockwise, then drive forwards |
 | S | Stop |
 
+<a id="drive_square"></a>
 ## [Driving in a Square](/warmup_project/warmup_project/drive_square.py)
 To make the robot drive in a square, I used a time-based approach to command the velocity messages. To calculate the time needed for the robot to drive the length of one side, I divided the desired length by the linear velocity I defined. Similarly, to find the time needed for the robot to turn a complete right angle, I divided the radians by the angular velocity. Once I had these time values, I used an if statement to check the time passed and call the functions defining the necessary velocities. Something I found tricky about this behavior was that I had to correct for turning time. Using the precise radians for a right angle turn resulted in a smaller turn in practice, so I experimentally increased the radians until the behavior looked correct.
 
 If I had more time, I would have tried approaching the problem using the Neato's odometry.
 
+<a id="wall_follower"></a>
 ## [Wall Follower](/warmup_project/warmup_project/wall_follower.py)
 <p align="center">
     <img src="images/wall_follower.png">
@@ -58,14 +61,17 @@ For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, a
 
 The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions.
 
+<a id="person_follower"></a>
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
 <p align="center">
     <img src="images/person_follower.png"> <br>
     Figure 2: Person follower
 </p>
 
+<a id="obstacle_avoider"></a>
 ## [Obstacle Avoider](/warmup_project/warmup_project/obstacle_avoider.py)
 
+<a id="finite_state_controller"></a>
 ## [Finite State Controller](/warmup_project/warmup_project/finite_state_controller.py)
 
 # Reflection
