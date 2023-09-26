@@ -51,7 +51,7 @@ If the distance readings from 45 and 135 degrees are *equal* (middle diagram in 
 
 For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, and 135 degrees. To do so, I converted the readings into cartesian coordinates using the following equations so that I could plot them in the Neato’s base_link coordinate frame:
 
-$x = (\text{distance reading at } 45&deg;) \times cos(45&deg;)$
+$x = (\text{distance reading at } 45&deg;) \times \cos(45&deg;)$
 
 The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions.
 
