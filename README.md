@@ -4,12 +4,12 @@
 
 * [Introduction](#introduction)
 * [Behaviors](#behaviors)
-    * [Robot Teleop](##teleop)
-    * [Driving in a Square](##square)
-    * [Wall Follower](##wall)
-    * [Person Follower](##person)
-    * [Obstacle Avoider](##obstacle)
-    * [Finite State Controller](##controller)
+    + [Robot Teleop](#teleop)
+    + [Driving in a Square](#square)
+    + [Wall Follower](#wall)
+    + [Person Follower](#person)
+    + [Obstacle Avoider](#obstacle)
+    + [Finite State Controller](#controller)
 * [Reflection](#reflection)
 
 # Introduction
