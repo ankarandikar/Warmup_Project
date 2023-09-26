@@ -29,10 +29,9 @@ The robot teleoperator controls the Neato’s movement depending on the user’s
 | S | Stop |
 
 ## [Driving in a Square](/warmup_project/warmup_project/drive_square.py)
-![Visualization](./wall_follower.svg)
-<img src="./wall_follower.svg">
 
 ## [Wall Follower](/warmup_project/warmup_project/wall_follower.py)
+![](images/wall_follower.png)
 
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
 
