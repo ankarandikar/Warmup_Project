@@ -74,7 +74,7 @@ class WallFollower(Node):
             self.vel_publisher.publish(vel)
 
             if dist_45 > dist_135:  # If Neato is angled away from wall, turn left (towards wall)
-                vel.angular.z = 0.1*dist_90     # Angular velocity is proportional to distance from wall (closer=faster, further=slower)
+                vel.angular.z = 0.1*dist_90     # Angular velocity is proportional to distance from wall (closer=slower, further=faster)
                 vel.linear.x = 0.1
                 self.vel_publisher.publish(vel)
 
