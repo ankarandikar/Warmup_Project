@@ -106,7 +106,7 @@ class WallFollower(Node):
 
     def publish_marker45(self):
         '''
-        Create marker at 45 degree reading in Neato's base_link coordinate frame
+        Create pink marker at 45 degree reading in Neato's base_link coordinate frame.
         '''
         if not self.scan:
             return
@@ -137,7 +137,7 @@ class WallFollower(Node):
 
     def publish_marker90(self):
         '''
-        Create marker at 90 degree reading in Neato's base_link coordinate frame
+        Create blue marker at 90 degree reading in Neato's base_link coordinate frame.
         '''
         if not self.scan:
             return
@@ -168,7 +168,7 @@ class WallFollower(Node):
     
     def publish_marker135(self):
         '''
-        Create marker at 135 degree reading in Neato's base_link coordinate frame
+        Create green marker at 135 degree reading in Neato's base_link coordinate frame.
         '''
         if not self.scan:
             return

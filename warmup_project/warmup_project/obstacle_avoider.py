@@ -88,7 +88,7 @@ class ObstacleAvoider(Node):
             if self.x_COM == 0: # Wait until x_COM is not 0 to be able to calculate the obstacle angle
                 return
             
-            # Polar conversion of COM to get obstacle angle
+            # Polar conversion of COM to get obstacle angle (-45 to 45 degrees)
             self.obstacle_angle = math.degrees(math.atan(self.y_COM/self.x_COM)) 
         
     def run_loop(self):
