@@ -100,7 +100,7 @@ The obstacle avoider script makes the Neato drive straight while avoiding obstac
 
 I processed the Neato’s LIDAR scans in a separate function. From the 360-degree scan.ranges array returned by the LaserScan message, I saved entries with distance readings below 1.0 meters and angles between 0-45 degrees and 315-360 degrees (which covers the front quarter-circle of the Neato’s LIDAR scan). I converted each of these filtered values into cartesian coordinates using the following equations:
 
-<p align=“center”>
+<p align="center">
 $x = \text{distance} \times \cos(\text{angle})$ <br>
 $y = \text{distance} \times \sin(\text{angle})$
 </p>
@@ -108,7 +108,7 @@ $y = \text{distance} \times \sin(\text{angle})$
 Once again, I used the cartesian coordinates to get the x- and y-coordinates of the center of mass of the scan readings, which represents the main obstacle in the Neato’s path. I added another variable, obstacle_angle, to keep track of the angle of the center of mass within the Neato’s base_link coordinate frame. To calculate this angle, I converted the center of mass back to polar coordinates:
 
 <p align=“center”>
-$obstacle_angle = \atan(y_COM/x_COM)$
+$obstacle_angle = \tan^{-1}(y_COM/x_COM)$
 </p>
 
 Due to the nature of inverse tan, this equation returns the angle within the range -45 to 45 degrees.
