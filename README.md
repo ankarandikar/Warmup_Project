@@ -15,6 +15,8 @@
 # Introduction
 Over the course of this project, I implemented five primary behaviors on a Neato robot platform: teleoperation, driving in a square, wall following, person following, and obstacle avoidance. The final behavior was a finite state controller to switch between two behaviors (wall following and person following).
 
+[Watch a live demo of some of the behaviors here.](https://youtu.be/4wJ-5gZ68Jo?si=zt4bmyDAzNCe15H-)
+
 # Behaviors
 
 <a id="robot_teleop"></a>
@@ -67,6 +69,25 @@ The code in this script is primarily structured in a series of nested if loops. 
     <img src="images/person_follower.png"> <br>
     Figure 2: Person follower
 </p>
+
+The person follower script makes the Neato follow the center of mass of the LIDAR scan readings in front of it, which is assumed to represent a person.
+
+The first important section of the script is the scan processing. From the 360-degree scan.ranges array returned by the LaserScan message, I saved entries with distance readings below 1.5 meters and angles between 0-90 degrees and 270-360 degrees (which covers the front semicircle of the Neato’s LIDAR scan). I converted each of these filtered values into cartesian coordinates using the following equations:
+
+<p align=”center”>
+$x = \text{distance} \times \cos(angle)$ <br>
+$y = \text{distance} \times \sin(angle)$
+</p>
+
+I took the average of all the x- and y-values to get the x- and y-coordinates of the center of mass, which I then used to determine the velocity commands.
+
+The Neato drives forward at a linear velocity directly proportional to the x-coordinate of the center of mass. This makes the robot move faster if the target is further away and slower if the target is closer. The angular velocity of the Neato is positively and directly proportional to the y-coordinate of the center of mass. If the y is negative, indicating that the target is to the right of the Neato, the angular velocity will also be negative, making the Neato turn clockwise towards the target. If the y is positive, indicating that the target is to the left of the Neato, the angular velocity will be positive, making the Neato turn counterclockwise towards the target.
+
+Due to the proportional control, if the target is further to the sides of the Neato and the y-coordinate is large, the angular velocity will be greater so that the Neato turns towards the target faster. If the target is closer to the x-axis and the y-coordinate is smaller, the angular velocity will be smaller since the Neato will have to turn less to face the target.
+
+For this behavior, I chose to visualize the center of mass of the readings, which represented the person. Since the center of mass is typically very close to the Neato, I multiplied the values of the x- and y-coordinates by a scalar in order to magnify the value and make the center of mass easier to see in RViz.
+
+The velocity commands in this script are contained in one if statement that monitors the bump sensors to make the Neato stop if they are active (i.e., if the Neato hit something). A tricky part of this implementation was experimentally fine-tuning which scan readings I wanted to save. I had to balance between allowing a large enough distance and angle range to get readings without getting too close to the Neato, and restricting the distances and angles to block out noise from the surroundings. If I had more time, I would have separated the scan processing into its own function for readability and efficiency. I would also have liked to implement a more sophisticated PID controller for the velocities.
 
 <a id="obstacle_avoider"></a>
 ## [Obstacle Avoider](/warmup_project/warmup_project/obstacle_avoider.py)
