@@ -126,12 +126,24 @@ For this script, I separated the scan processing and velocity commands into sepa
     Figure 4: Finite-state diagram
 </p>
 
+For the finite-state controller, I chose to switch between the states of wall and person following (Figure 4). In each state, the robot essentially performed the same behaviors as in the individual wall_follower and person_follower scripts. The only difference from the original scripts is that I restricted the observed LIDAR scan range for the person follower further (-40 to 40 degrees instead of -90 to 90 degrees) so that the nearby wall would not influence the center of mass of the readings.
+
 <p align="center">
-    <img src="images/finite_state_controller.png"> <br>
-    Figure 5: Person following state
+    <img src="images/finite_state_transition.png"> <br>
+    Figure 5: Transition to person following state
 </p>
 
-# Reflection
-I chose to work alone so that I could work on every aspect of this project and build an intuition for robot programming. While I do think I gained what I wanted from the experience, completing the entire project by myself - especially with a lack of experience - took much longer than the project was supposed to.
+The robot defaults to wall following unless the scans within the angles -20 to 20 degrees return a value within 1.5 meters, indicating the presence of a person (Figure 5). At this point, the robot switches to person following until it no longer receives values within the range of angles.
 
-The biggest hurdle I had to overcome to complete this project was my lack of experience with python and ROS. Upon reflection, I think I am much more comfortable with the basics of programming now, though there are a lot of advanced techniques I would like to learn to make my code better. I am aware that a lot of my code can be much more efficiently programmed than it is - unfortunately, I ran out of time to do so.
+Within the script, the wall and person following behaviors are contained in their own functions copied from the main scripts. A separate function, process_angles, stores the scan readings within the desired -20 to 20 degrees. The main function, run_loop, switches between states based on whether there are values in the 40 degree range while the bump sensors are not pressed.
+
+One of the tricky parts of this implementation was figuring out the transition between the states. Initially, I had left the original range of angles in the person following behavior (-90 to 90 degrees). I eventually realized that since the transition to the person following state would occur while the Neato was still next to the wall, the wall would significantly skew the center of mass of the readings.
+
+If I had more time, I would have liked to figure out how to use multi-threading, which would have been a more sophisticated way to call the states than copying the main functions.
+
+# Reflection
+I chose to work alone on this project so that I could work on every aspect of it, and build an intuition for robot programming. While I do think I gained what I wanted from the experience, completing the entire project by myself - especially with a lack of experience - took much longer than the project was supposed to.
+
+The biggest hurdle I had to overcome to complete this project was my lack of experience with python and ROS. Upon reflection, I think I am much more comfortable with the basics of programming now, though there are a lot of advanced techniques I would like to learn to make my code better. I am aware that a lot of my code can be much more efficiently programmed than it is - unfortunately, I ran out of time to do so. Here are a few of my most important takeaways:
+1. Take advantage of splitting code up into functions. For most of my scripts, most if not all of the code is contained in the run_loop function, and using additional functions would have made my code much easier to read.
+2. Create documentation along the way. This may seem obvious, but I chose to focus on getting all my behaviors working first, and when the time came to record my visualizations and bags, it seemed like parts of my code were strangely breaking when they had worked days before. Upon reflection, I think a big contributor to this was that some of the Neatos don’t receive LIDAR scan readings at certain angles, and I spent a long time trying to debug my code before realizing it was an issue with the robot. Recording my documentation after getting the scripts working for the first time would have saved me a lot of trouble.
