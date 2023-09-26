@@ -74,9 +74,9 @@ The person follower script makes the Neato follow the center of mass of the LIDA
 
 The first important section of the script is the scan processing. From the 360-degree scan.ranges array returned by the LaserScan message, I saved entries with distance readings below 1.5 meters and angles between 0-90 degrees and 270-360 degrees (which covers the front semicircle of the Neato’s LIDAR scan). I converted each of these filtered values into cartesian coordinates using the following equations:
 
-<p align=”center”>
-$x = \text{distance} \times \cos(angle)$ <br>
-$y = \text{distance} \times \sin(angle)$
+<p align="center">
+$x = \text{distance} \times \cos(\text{angle})$ <br>
+$y = \text{distance} \times \sin(\text{angle})$
 </p>
 
 I took the average of all the x- and y-values to get the x- and y-coordinates of the center of mass, which I then used to determine the velocity commands.
