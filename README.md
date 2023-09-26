@@ -23,8 +23,6 @@ Over the course of this project, I implemented five primary behaviors on a Neato
 ## [Robot Teleop](/warmup_project/warmup_project/teleop.py)
 The robot teleoperator controls the Neato’s movement depending on the user’s keyboard input. The W and X keys command the robot to drive forwards and backwards, respectively, at 1 meter per second. The S key brings it to a stop. I decided to have the A and D keys make the robot turn counterclockwise and clockwise, respectively, and then continue driving forward. For these turning commands, the robot turns at 1 radian per second for enough time to make a 90 degree turn, then drives straight per a linear velocity command. Once a key is pressed, the behavior continues until another key is pressed.
 
-The code consists of one main if statement that checks for the keyboard input. If I had more time, I would want to structure my velocity commands more efficiently by using functions.
-
 | Key    | Result |
 | -------- | ------- |
 | W | Drive forwards |
@@ -33,11 +31,13 @@ The code consists of one main if statement that checks for the keyboard input. I
 | D | Turn clockwise, then drive forwards |
 | S | Stop |
 
+The code consists of one main if statement that checks for the keyboard input. If I had more time, I would want to structure my velocity commands more efficiently by using functions.
+
 <a id="drive_square"></a>
 ## [Driving in a Square](/warmup_project/warmup_project/drive_square.py)
-To make the robot drive in a square, I used a time-based approach to command the velocity messages. To calculate the time needed for the robot to drive the length of one side, I divided the desired length by the linear velocity I defined. Similarly, to find the time needed for the robot to turn a complete right angle, I divided the radians by the angular velocity. Once I had these time values, I used an if statement to check the time passed and call the functions defining the necessary velocities. Something I found tricky about this behavior was that I had to correct for turning time. Using the precise radians for a right angle turn resulted in a smaller turn in practice, so I experimentally increased the radians until the behavior looked correct.
+To make the robot drive in a square, I used a time-based approach to command the velocity messages. To calculate the time needed for the robot to drive the length of one side, I divided the desired length by the linear velocity I defined. Similarly, to find the time needed for the robot to turn a complete right angle, I divided the radians by the angular velocity. Once I had these time values, I used an if statement to check the time passed and call the functions defining the necessary velocities.
 
-If I had more time, I would have tried approaching the problem using the Neato's odometry.
+Something I found tricky about this behavior was that I had to correct for turning time. Using the precise radians for a right angle turn resulted in a smaller turn in practice, so I experimentally increased the radians until the behavior looked correct. If I had more time, I would have tried approaching the problem using the Neato's odometry.
 
 <a id="wall_follower"></a>
 ## [Wall Follower](/warmup_project/warmup_project/wall_follower.py)
@@ -61,7 +61,7 @@ For the wall follower, I chose to visualize the LIDAR scan readings at 45, 90, a
     $y = (\text{distance reading at } A&deg;) \times \sin(A&deg;)$
 </p>
 
-The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions.
+The code in this script is primarily structured in a series of nested if loops. For this behavior, like a few others, I monitored the bump sensors on the Neato to make it stop if they were active (i.e., if the Neato hit something). One difficulty I encountered was that some of the Neatos did not return readings at select angles, so I had to remember to check my outputs with print statements whenever I connected to a Neato. If I had more time, I would have explored condensing my code by containing the velocity commands in separate functions. I would also have liked to try a different visualization method such as MarkerArray to make my visualization functions more efficient.
 
 <a id="person_follower"></a>
 ## [Person Follower](/warmup_project/warmup_project/person_follower.py)
@@ -91,6 +91,33 @@ The velocity commands in this script are contained in one if statement that moni
 
 <a id="obstacle_avoider"></a>
 ## [Obstacle Avoider](/warmup_project/warmup_project/obstacle_avoider.py)
+<p align="center">
+    <img src="images/obstacle_avoider.png"> <br>
+    Figure 3: Obstacle avoider
+</p>
+
+The obstacle avoider script makes the Neato drive straight while avoiding obstacles in its path. I approached this behavior in a very similar way to the person follower.
+
+I processed the Neato’s LIDAR scans in a separate function. From the 360-degree scan.ranges array returned by the LaserScan message, I saved entries with distance readings below 1.0 meters and angles between 0-45 degrees and 315-360 degrees (which covers the front quarter-circle of the Neato’s LIDAR scan). I converted each of these filtered values into cartesian coordinates using the following equations:
+
+<p align=“center”>
+$x = \text{distance} \times \cos(\text{angle})$ <br>
+$y = \text{distance} \times \sin(\text{angle})$
+</p>
+
+Once again, I used the cartesian coordinates to get the x- and y-coordinates of the center of mass of the scan readings, which represents the main obstacle in the Neato’s path. I added another variable, obstacle_angle, to keep track of the angle of the center of mass within the Neato’s base_link coordinate frame. To calculate this angle, I converted the center of mass back to polar coordinates:
+
+<p align=“center”>
+$obstacle_angle = \atan(y_COM/x_COM)$
+</p>
+
+Due to the nature of inverse tan, this equation returns the angle within the range -45 to 45 degrees.
+
+For the velocity commands, if both coordinates of the center of mass are 0 (indicating no obstacles present), the Neato defaults to driving forward. If there *is* an obstacle, the angular velocity is negatively proportional to the obstacle angle. This means that if the obstacle angle is in the range 0 to 45 degrees (i.e., to the left of the Neato), the angular velocity will be negative, turning the Neato clockwise away from the obstacle. If the obstacle angle is in the range -45 to 0 degrees (i.e., to the right of the Neato), the angular velocity will be positive, turning the Neato counterclockwise away from the obstacle. The angular velocity is also inversely proportional to the obstacle angle; if the magnitude of the angle is closer to 45 and the obstacle is closer to the sides of the Neato, the angular velocity will be smaller and Neato can turn more slowly away since the risk of running into it is low. If the magnitude of the angle is closer to 0 and the obstacle is closer to the center of the Neato, the angular velocity will be great and the Neato will turn more sharply away to avoid the obstacle.
+
+For this behavior, I made a slightly more complex visualization; if the center of mass of the obstacle is 0, meaning that there are no obstacles in range, I created a teal marker at coordinates (0.5 m, 0.0 m) in the Neato’s base_link coordinate frame to indicate that the Neato is simply driving forward. If there is an obstacle in range, a pink marker is created at the obstacle’s center of mass. Like the visualization for the person follower, I magnified these coordinates to make them easier to see in RViz.
+
+For this script, I separated the scan processing and velocity commands into separate functions, which I believe made the script much easier to read. If I had more time, I would have tried to implement the most-sophisticated potential fields approach.
 
 <a id="finite_state_controller"></a>
 ## [Finite State Controller](/warmup_project/warmup_project/finite_state_controller.py)
