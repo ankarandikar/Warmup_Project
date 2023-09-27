@@ -1,5 +1,5 @@
 # Warmup Project
-*Anusha Karandikar*
+*Anusha Karandikar* <br>
 *Introduction to Computational Robotics, Fall 2023*
 
 - [Introduction](#introduction)
@@ -13,7 +13,7 @@
 - [Reflection](#reflection)
 
 # Introduction
-Over the course of this project, I implemented five primary behaviors on a Neato robot platform: teleoperation, driving in a square, wall following, person following, and obstacle avoidance. The final behavior was a finite state controller to switch between two behaviors (wall following and person following).
+Over the course of this project, I implemented five primary behaviors on a Neato robot platform: teleoperation, driving in a square, wall following, person following, and obstacle avoidance. The final implementation was a finite state controller to switch between two behaviors (wall following and person following).
 
 [Watch a live demo of some of the behaviors here.](https://youtu.be/4wJ-5gZ68Jo?si=zt4bmyDAzNCe15H-)
 
@@ -35,7 +35,7 @@ The code consists of one main if statement that checks for the keyboard input. I
 
 <a id="drive_square"></a>
 ## [Driving in a Square](/warmup_project/warmup_project/drive_square.py)
-To make the robot drive in a square, I used a time-based approach to command the velocity messages. To calculate the time needed for the robot to drive the length of one side, I divided the desired length by the linear velocity I defined. Similarly, to find the time needed for the robot to turn a complete right angle, I divided the radians by the angular velocity. Once I had these time values, I used an if statement to check the time passed and call the functions defining the necessary velocities.
+To make the robot drive in a square, I used a time-based approach to publish velocity commands in sequence. To calculate the time needed for the robot to drive the length of one side, I divided the desired length by a baseline linear velocity I defined. Similarly, to find the time needed for the robot to turn a complete right angle, I divided the radians by a baseline angular velocity. Once I had these time values, I used an if statement to check the time passed and to call the functions defining the necessary velocities.
 
 Something I found tricky about this behavior was that I had to correct for turning time. Using the precise radians for a right angle turn resulted in a smaller turn in practice, so I experimentally increased the radians until the behavior looked correct. If I had more time, I would have tried approaching the problem using the Neato's odometry.
 
@@ -46,11 +46,11 @@ Something I found tricky about this behavior was that I had to correct for turni
     Figure 1: Wall follower conditions
 </p>
 
-The wall follower script pilots the Neato to drive forward along a wall while aligning itself to be parallel to the wall. It is assumed that the Neato is close to a wall on its left side when the program starts. The Neato platform returns LIDAR readings, which I used to determine its parallelism and distance to the wall. The main readings I used were for the angles of 45, 90, and 135 degrees.
+The wall follower script pilots the Neato to drive forward along a wall while aligning itself to be parallel to the wall. It is assumed that the Neato is close to a wall on its left side when the program starts. The Neato platform returns LIDAR scan readings, which I used to determine its parallelism and distance to the wall. The main readings I used were for the angles of 45, 90, and 135 degrees.
 
-The Neato defaults to purely driving forwards, with angular velocity controlled by the distance readings: if the distance reading from 45 degrees is *greater* than the reading from 135 degrees (leftmost diagram in Figure 1), this indicates that the Neato is oriented away from the wall. Therefore, the angular velocity is set to a positive (i.e., counterclockwise) value to turn the Neato back towards the wall. In this case, the angular velocity is *directly* proportionally controlled by the distance reading at 90 degrees. If the Neato has traveled far from the wall, it is imperative to correct the behavior before the Neato gets too far and no longer receives readings from the wall. Therefore, if the distance at 90 degrees is bigger, the Neato will turn back towards the wall faster, and vice versa; if the Neato is still close to the wall and the distance at 90 degrees is small, the Neato can turn more slowly.
+The Neato defaults to purely driving forwards, with angular velocity controlled by the distance readings: if the distance reading from 45 degrees is *greater* than the reading from 135 degrees (leftmost diagram in Figure 1), this indicates that the Neato is oriented away from the wall. Therefore, the angular velocity is set to a positive (i.e., counterclockwise) value to turn the Neato back towards the wall. In this case, the angular velocity is *directly* proportionally controlled by the distance reading at 90 degrees. If the Neato has traveled far from the wall, it is imperative to correct the behavior before the Neato gets too far and no longer receives readings from the wall. Therefore, if the distance at 90 degrees is large, the Neato will turn back towards the wall faster, and vice versa; if the Neato is still close to the wall and the distance at 90 degrees is small, the Neato can turn more slowly.
 
-Similarly, if the distance reading from 45 degrees is *less* than the reading from 135 degrees (rightmost diagram in Figure 1), this indicates that the Neato is oriented towards the wall, and risks running into it. Therefore, the angular velocity is set to a negative (i.e., clockwise) value to turn the Neato away from the wall. In this case, the angular velocity is *inversely* proportionally controlled by the distance reading at 90 degrees. If the Neato is oriented towards the wall, the heading of the robot needs to be changed quickly before it can run into the wall. Therefore, if the distance at 90 degrees is small, the angular velocity will be greater; if the distance is bigger, there is more time to correct the heading, so the angular velocity can be smaller.
+Similarly, if the distance reading from 45 degrees is *less* than the reading from 135 degrees (rightmost diagram in Figure 1), this indicates that the Neato is oriented towards the wall, and risks running into it. Therefore, the angular velocity is set to a negative (i.e., clockwise) value to turn the Neato away from the wall. In this case, the angular velocity is *inversely* proportionally controlled by the distance reading at 90 degrees. If the Neato is oriented towards the wall, the heading of the robot needs to be changed quickly before it can run into the wall. Therefore, if the distance at 90 degrees is small, the angular velocity will be greater; if the distance is large, there is more time to correct the heading, so the angular velocity can be smaller.
 
 If the distance readings from 45 and 135 degrees are *equal* (middle diagram in Figure 1), the robot tries to get parallel to the wall at a distance of 0.3 meters. If the distance reading at 90 degrees is above 0.3 meters, the angular velocity is set to a positive value to turn the Neato counterclockwise and get closer to the wall. If the distance reading at 90 degrees is less than 0.3 meters, the angular velocity is set to a negative value to turn the Neato clockwise and get further away from the wall.
 
